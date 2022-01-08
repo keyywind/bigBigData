@@ -8,13 +8,19 @@ import numpy, pickle
 
 from matplotlib import pyplot
 
-trainFile, trainData = "./mushroom_training_data_D-i022022_T-210808.json", []
+trainFile, trainData = "./mushroom_training_data_D-i082022_T-223114.json", []
 
 with open(trainFile, "rb") as RF: trainData = pickle.load(RF)
 
+print(len(trainData), len(trainData[0]))
+
+
+# 53 - 2 = 51
+# 91 - 2 = 89
+# 46 - 2 = 44
 model = models.Sequential([
-    layers.Input(shape = (89,)),
-    layers.Dense(256, activation = "relu"),
+    layers.Input(shape = (44,)), 
+    layers.Dense(128, activation = "relu"),
     layers.Dropout(0.1),
     layers.Dense(64, activation = "relu"),
     layers.Dropout(0.1),
@@ -39,7 +45,7 @@ print("Test: ", type(test_data), type(test_label), len(test_data), len(test_data
 
 history = model.fit(
     train_data, train_label, validation_data = (test_data, test_label), epochs = 5000, batch_size = 64, 
-    callbacks = [ callbacks.EarlyStopping(monitor = "val_Accuracy", patience = 50, min_delta = 0.01) ]
+    callbacks = [ callbacks.EarlyStopping(monitor = "val_loss", patience = 75, min_delta = 0.01) ]
 )
 
 pyplot.plot(history.history["Accuracy"])
